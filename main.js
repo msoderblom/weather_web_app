@@ -53,17 +53,21 @@
     console.log(apiKey);
     console.log("Found coordinates: ", latitude, longitude);
 
-    const endpoint = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
-    const res = await request(endpoint);
-    console.log(res);
+    const endpoint1 = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
+    const currentWeather = await request(endpoint1);
+    console.log(currentWeather);
+
+    const endpoint2 = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=current,minutely,hourly&units=metric&appid=${apiKey}`;
+    const dailyForecast = await request(endpoint2);
+    console.log(dailyForecast);
+
+    renderWeatherInfo(currentWeather, dailyForecast);
   };
 
-  /*  const getLocation = () => {
-    if (navigator.geolocation) {
-
-      
-    }
-  } */
+  const renderWeatherInfo = (currentWeather, dailyForecast) => {
+    console.log(currentWeather.name);
+    console.log(currentWeather.main.temp);
+  };
 
   const geolocate = () => {
     if (window.navigator && window.navigator.geolocation) {
