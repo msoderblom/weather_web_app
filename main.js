@@ -1,4 +1,14 @@
 (() => {
+  const weekdays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
   const weatherPlaceholder = {
     coord: { lon: 18.19, lat: 59.25 },
     weather: [
@@ -1023,7 +1033,7 @@
     const apiKey = await getKey().then((json) => {
       return json.key;
     });
-    console.log(apiKey);
+
     console.log("Found coordinates: ", latitude, longitude);
 
     const endpoint1 = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
@@ -1045,6 +1055,7 @@
   const renderWeatherInfo = (currentWeather, weatherForecast) => {
     const currentSection = document.querySelector("#currentWeather");
     const hourlySection = document.querySelector("#hourlyForecast");
+    const dailySection = document.querySelector("#dailyForecast");
 
     // ${}
     const currentContent = `
@@ -1052,8 +1063,8 @@
                             currentWeather.weather[0].icon
                           }@2x.png" alt="Weather icon">
                           <p>${currentWeather.name}</p>
-                          <p>${currentWeather.main.temp}</p>
-                          <p>${currentWeather.main.feels_like}</p>
+                          <p>${currentWeather.main.temp}&deg;C</p>
+                          <p>${currentWeather.main.feels_like}&deg;C</p>
                           <p>${unixToHours(
                             currentWeather.timezone + currentWeather.dt
                           )}</p>
@@ -1069,19 +1080,21 @@
 
     const hours = weatherForecast.hourly
       .map((hour) => {
-        return `<th>${unixToHours(currentWeather.timezone + hour.dt)}</th>`;
+        return `<th>${unixToHours(
+          weatherForecast.timezone_offset + hour.dt
+        )}</th>`;
       })
       .join("");
     //description
     const weatherIcons = weatherForecast.hourly
       .map((hour) => {
-        return `<th><img src="http://openweathermap.org/img/wn/${hour.weather[0].icon}.png" alt="Weather icon: ${hour.weather[0].description}"></th>`;
+        return `<td><img src="http://openweathermap.org/img/wn/${hour.weather[0].icon}.png" alt="Weather icon: ${hour.weather[0].description}"></td>`;
       })
       .join("");
 
     const temps = weatherForecast.hourly
       .map((hour) => {
-        return `<th>${hour.temp}</th>`;
+        return `<td>${hour.temp}&deg;</td>`;
       })
       .join("");
 
@@ -1093,10 +1106,23 @@
 
     hourlySection.innerHTML = hourlyTable;
 
-    /* const dateObj = new Date(weatherForecast.hourly[0].dt * 1000);
-    let hours = dateObj.getUTCHours();
-    hours = hours.toString().padStart(2, "0");
-    console.log(hours); */
+    const days = weatherForecast.daily
+      .slice(1)
+      .map((day) => {
+        const weekday =
+          weekdays[unixToDay(weatherForecast.timezone_offset + day.dt)];
+
+        return `<tr>
+        <td>${weekday}</td>
+        <td><img src="http://openweathermap.org/img/wn/${day.weather[0].icon}.png" alt="Weather icon: ${day.weather[0].description}"></td>
+        <td>${day.temp.min}</td>
+        <td>${day.temp.max}</td>
+      </tr>`;
+      })
+      .join("");
+
+    const dailyTable = `<table>${days}</table>`;
+    dailySection.innerHTML = dailyTable;
   };
 
   const unixToHours = (unixTimestamp) => {
@@ -1104,6 +1130,11 @@
     let hours = dateObj.getUTCHours();
     hours = hours.toString().padStart(2, "0");
     return hours;
+  };
+
+  const unixToDay = (unixTimestamp) => {
+    const dateObj = new Date(unixTimestamp * 1000);
+    return dateObj.getDay();
   };
 
   const geolocate = () => {
