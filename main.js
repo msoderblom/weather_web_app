@@ -1014,9 +1014,9 @@
     ],
   };
 
-  const getKey = async () => {
+  const getKeys = async () => {
     return new Promise(async (resolve) => {
-      const response = await fetch("./private/api_key.php");
+      const response = await fetch("./private/api_keys.php");
       const json = await response.json();
       resolve(json);
     });
@@ -1030,9 +1030,12 @@
   };
 
   const getLocalWeather = async (latitude, longitude) => {
-    const apiKey = await getKey().then((json) => {
-      return json.key;
+    const apiKey = await getKeys().then((json) => {
+      return json.weather_key;
     });
+
+    /*    latitude = 51.509865;
+    longitude = -0.118092; */
 
     console.log("Found coordinates: ", latitude, longitude);
 
@@ -1166,4 +1169,71 @@
   };
 
   geolocate();
+
+  const autoComplete = async (e) => {
+    const searchWord = e.currentTarget.value.toLowerCase();
+
+    if (searchWord == "" || searchWord == null) {
+      document.querySelector("#suggestionList").innerHTML = "";
+      return;
+    }
+
+    const apiKey = await getKeys().then((json) => {
+      return json.here_key;
+    });
+
+    const endpoint = `https://geocode.search.hereapi.com/v1/geocode?q=${encodeURIComponent(
+      searchWord
+    )}&lang=en&apiKey=${apiKey}`;
+    const suggestions = await request(endpoint);
+
+    renderSuggestions(suggestions);
+  };
+
+  const renderSuggestions = (suggestionsObj) => {
+    suggestions = suggestionsObj.items;
+
+    /* console.log(suggestions[0].title); */
+
+    const listitems = suggestions
+      .map((suggestion) => {
+        return `<li class="suggestion-listitem" data-lat="${suggestion.position.lat}" data-long="${suggestion.position.lng}">${suggestion.title}</li>`;
+      })
+      .join("");
+
+    const suggestionList = document.querySelector("#suggestionList");
+    suggestionList.innerHTML = listitems;
+
+    document.querySelectorAll(".suggestion-listitem").forEach((listitem) => {
+      listitem.addEventListener("click", getSearchedWeather);
+    });
+  };
+  const getSearchedWeather = async (e) => {
+    console.log("hej från getSearchedWeather");
+    /*  const latitude =  */
+    console.log(e.currentTarget.dataset.lat);
+    console.log(e.currentTarget.dataset.long);
+    const latitude = e.currentTarget.dataset.lat;
+    const longitude = e.currentTarget.dataset.long;
+    const apiKey = await getKeys().then((json) => {
+      return json.weather_key;
+    });
+
+    const endpoint1 = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
+    const currentWeather = await request(endpoint1);
+    console.log(currentWeather);
+
+    const endpoint2 = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=current,minutely&units=metric&appid=${apiKey}`;
+    const weatherForecast = await request(endpoint2);
+    console.log(weatherForecast);
+
+    renderWeatherInfo(currentWeather, weatherForecast);
+  };
+
+  document
+    .querySelector("#searchInput")
+    .addEventListener("change", autoComplete);
+  document
+    .querySelector("#searchInput")
+    .addEventListener("keyup", autoComplete);
 })();
