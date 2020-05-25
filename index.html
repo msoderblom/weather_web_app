@@ -9,18 +9,20 @@
     />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
+    <link rel="stylesheet" href="./styles/style.css" />
     <title>Document</title>
   </head>
   <body>
     <header><h1>hello</h1></header>
     <main>
       <article class="weather-info">
-        <section id="currentWeather" class="weather-info__current"></section>
-        <section id="hourlyForecast" class="weather-info__hourly"></section>
-        <section id="dailyForecast" class="weather-info__daily"></section>
+        <section id="currentWeather" class="current-weather"></section>
+        <section id="hourlyForecast" class="hourly-forecast"></section>
+        <section id="dailyForecast" class="daily-weahter"></section>
       </article>
       <section id="searchSection">
         <input type="search" name="search" id="searchInput" />
+        <ul id="suggestionList"></ul>
       </section>
     </main>
     <footer>

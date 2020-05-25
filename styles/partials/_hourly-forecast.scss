@@ -1,0 +1,8 @@
+.hourly-forecast {
+  max-width: 100vw;
+  overflow-x: scroll;
+   scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
