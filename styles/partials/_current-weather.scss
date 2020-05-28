@@ -1,0 +1,62 @@
+.current-weather {
+  border-bottom: rgba(255, 255, 255, 0.5) 1px solid;
+  &__main-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /*   grid-template-columns: auto 1fr; */
+    /* grid-template-columns: 70px auto 1fr; */
+    /*  grid-template-rows: auto;
+    column-gap: 5px;
+    align-items: center;
+    justify-content: center; */
+
+    padding: 10px;
+
+    &__temp {
+      font-size: 4.4em;
+      margin: 0;
+      text-align: center;
+      letter-spacing: -5px;
+      span {
+        font-weight: 300;
+      }
+    }
+    &__extra-info {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto 20px auto;
+      align-items: center;
+
+      padding-left: 15px;
+      &__place {
+        grid-column: span 2;
+        margin: 0;
+        font-size: 1rem;
+      }
+      &__icon {
+        max-height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        img {
+          max-width: 30px;
+          max-height: 30px;
+          object-fit: cover;
+          object-position: 50% 50%;
+
+          transform: scale(1.1);
+          margin-left: -5px;
+        }
+      }
+      &__feels-like {
+        grid-column: span 2;
+      }
+      p {
+        margin: 0;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+.daily-forecast {
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  tr {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 2fr 0.5fr 0.5fr;
+  }
+  td {
+    display: flex;
+    align-items: center;
+  }
+
+  &__table {
+    padding: 10px;
+    &__body {
+      &__weekday {
+        line-height: 1;
+      }
+      &__weather-icon {
+        justify-content: center;
+        div {
+          max-width: 50px;
+          max-height: 50px;
+        }
+        img {
+          max-width: 25px;
+          max-height: 25px;
+          object-fit: cover;
+          transform: scale(1.5);
+        }
+      }
+      &__max-temp,
+      &__min-temp {
+        justify-content: flex-end;
+      }
+    }
+  }
+}
