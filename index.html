@@ -2,7 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <meta
       http-equiv="Cache-Control"
       content="no-cache, no-store, must-revalidate"
@@ -10,36 +14,63 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <link rel="stylesheet" href="./styles/style.css" />
-    <link
+    <!--     <link
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       rel="stylesheet"
       integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
       crossorigin="anonymous"
-    />
+    /> -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/213a106bd2.css" />
+    <script
+      src="https://kit.fontawesome.com/089ad18a01.js"
+      crossorigin="anonymous"
+    ></script>
 
-    <title>Weather</title>
+    <title>Weatherly</title>
   </head>
   <body>
-    <header><h1>Weather</h1></header>
+    <header><h1>Weatherly</h1></header>
     <main class="main">
       <article class="weather-info">
         <section id="currentWeather" class="current-weather"></section>
         <section id="hourlyForecast" class="hourly-forecast"></section>
         <section id="dailyForecast" class="daily-forecast"></section>
       </article>
-      <section id="searchSection" class="hide search-position">
-        <input type="search" name="search" id="searchInput" />
-        <ul id="suggestionList"></ul>
+      <section id="searchSection" class="search-position hide">
+        <div class="search-position__search-container">
+          <div class="icon-wrapper">
+            <i class="fas fa-search"></i>
+
+            <input
+              placeholder="Search"
+              type="search"
+              name="search"
+              id="searchInput"
+              autocomplete="off"
+            />
+          </div>
+          <button
+            id="cancel-btn"
+            class="search-position__search-container__cancel-btn"
+          >
+            Cancel
+          </button>
+        </div>
+        <ul id="suggestionList" class="search-position__suggestion-list"></ul>
       </section>
     </main>
     <footer class="footer">
       <nav class="footer__navbar">
         <ul class="footer__navbar__ul">
           <li class="footer__navbar__ul__listitem">
-            <button id="current-pos-btn">Your position</button>
+            <button id="current-pos-btn">
+              <i class="fas fa-location-arrow"></i>Your location
+            </button>
           </li>
           <li class="footer__navbar__ul__listitem">
-            <button id="search-pos-btn">Search position</button>
+            <button id="search-pos-btn">
+              <i class="fas fa-search-location"></i>Search location
+            </button>
           </li>
         </ul>
       </nav>
@@ -54,5 +85,6 @@
       </p>
     </footer>
     <script src="./main.js"></script>
+    <script src="https://use.fontawesome.com/ef7b9d6e18.js"></script>
   </body>
 </html>
