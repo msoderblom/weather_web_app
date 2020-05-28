@@ -10,23 +10,48 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <link rel="stylesheet" href="./styles/style.css" />
-    <title>Document</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+
+    <title>Weather</title>
   </head>
   <body>
-    <header><h1>hello</h1></header>
-    <main>
+    <header><h1>Weather</h1></header>
+    <main class="main">
       <article class="weather-info">
         <section id="currentWeather" class="current-weather"></section>
         <section id="hourlyForecast" class="hourly-forecast"></section>
-        <section id="dailyForecast" class="daily-weahter"></section>
+        <section id="dailyForecast" class="daily-forecast"></section>
       </article>
-      <section id="searchSection">
+      <section id="searchSection" class="hide search-position">
         <input type="search" name="search" id="searchInput" />
         <ul id="suggestionList"></ul>
       </section>
     </main>
-    <footer>
-      <nav></nav>
+    <footer class="footer">
+      <nav class="footer__navbar">
+        <ul class="footer__navbar__ul">
+          <li class="footer__navbar__ul__listitem">
+            <button id="current-pos-btn">Your position</button>
+          </li>
+          <li class="footer__navbar__ul__listitem">
+            <button id="search-pos-btn">Search position</button>
+          </li>
+        </ul>
+      </nav>
+      <p class="footer__attribution">
+        Weather data from
+        <a
+          href="https://openweathermap.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          >OpenWeather</a
+        >
+      </p>
     </footer>
     <script src="./main.js"></script>
   </body>
