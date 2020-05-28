@@ -1,15 +1,42 @@
 .footer {
+  position: relative;
+  border-top: rgba(255, 255, 255, 0.5) 1px solid;
   &__navbar {
     &__ul {
       padding: 0;
       list-style: none;
       display: flex;
       justify-content: space-around;
+      margin: 10px 0 10px 0;
+      @media (min-width: 1000px) {
+        max-width: 1000px;
+        margin: 10px auto 10px auto;
+      }
       &__listitem {
+        cursor: pointer;
+        button {
+          font-size: 1rem;
+          cursor: pointer;
+          background: transparent;
+          color: white;
+          border-style: none;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          i {
+            font-size: 1.2rem;
+            padding-right: 5px;
+          }
+        }
       }
     }
   }
   &__attribution {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    opacity: 0.6;
     margin: 5px 0;
     text-align: center;
     font-size: 0.7rem;
