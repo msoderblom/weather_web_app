@@ -50,6 +50,9 @@
           margin-left: -5px;
         }
       }
+      &__description {
+        text-transform: capitalize;
+      }
       &__feels-like {
         grid-column: span 2;
       }
@@ -57,6 +60,26 @@
         margin: 0;
         font-size: 0.8rem;
       }
+    }
+  }
+  &__extra {
+    p {
+      margin: 0;
+    }
+    padding: 10px;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 100px 2fr 0.5fr 0.5fr;
+    &__wind {
+      justify-self: center;
+      text-align: center;
+    }
+    &__max-temp,
+    &__min-temp {
+      justify-self: end;
+    }
+    &__min-temp {
+      color: rgba(255, 255, 255, 0.7);
     }
   }
 }
