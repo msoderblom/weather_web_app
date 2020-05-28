@@ -1039,16 +1039,16 @@
 
     console.log("Found coordinates: ", latitude, longitude);
 
-    const endpoint1 = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
+    /* const endpoint1 = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
     const currentWeather = await request(endpoint1);
     console.log(currentWeather);
 
     const endpoint2 = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=current,minutely&units=metric&appid=${apiKey}`;
     const weatherForecast = await request(endpoint2);
-    console.log(weatherForecast);
+    console.log(weatherForecast); */
 
-    /* const currentWeather = weatherPlaceholder;
-    const weatherForecast = forecastPlaceholder; */
+    const currentWeather = weatherPlaceholder;
+    const weatherForecast = forecastPlaceholder;
     console.log(currentWeather);
     console.log(weatherForecast);
 
@@ -1061,17 +1061,57 @@
     const dailySection = document.querySelector("#dailyForecast");
 
     // ${}
-    const currentContent = `
-                          <img src="http://openweathermap.org/img/wn/${
-                            currentWeather.weather[0].icon
-                          }@2x.png" alt="Weather icon">
-                          <p>${currentWeather.name}</p>
-                          <p>${currentWeather.main.temp}&deg;C</p>
-                          <p>${currentWeather.main.feels_like}&deg;C</p>
-                          <p>${unixToHours(
-                            currentWeather.timezone + currentWeather.dt
-                          )}</p>
+    const currentContent = `<div class="current-weather__main-info">
+                            
+                              <p class="current-weather__main-info__temp">${Math.round(
+                                currentWeather.main.temp
+                              )}&deg;</p>
+                              <div class="current-weather__main-info__extra-info">
+                                <h2 class="current-weather__main-info__extra-info__place">${
+                                  currentWeather.name
+                                }</h2>
+                                <div class="current-weather__main-info__extra-info__icon">
+                                  <img src="https://openweathermap.org/img/wn/${
+                                    currentWeather.weather[0].icon
+                                  }@2x.png" alt="Weather icon">
+                                </div>
+                                <p class="current-weather__main-info__extra-info__description">${
+                                  currentWeather.weather[0].description
+                                }</p>
+                                <p class="current-weather__main-info__extra-info__feels-like">Feels like: ${
+                                  Math.round(
+                                    currentWeather.main.feels_like * 10
+                                  ) / 10
+                                }&deg;C</p>
+                              </div>
+                              
+                            </div>
                           `;
+
+    /*
+    const currentContent = `<div class="current-weather__main-info">
+                              <div class="current-weather__main-info__icon">
+                                <img src="https://openweathermap.org/img/wn/${
+                                  currentWeather.weather[0].icon
+                                }@2x.png" alt="Weather icon">
+                              </div>
+                              <p class="current-weather__main-info__temp">${Math.round(
+                                currentWeather.main.temp
+                              )}&deg;</p>
+                              <div class="current-weather__main-info__extra-info">
+                                <h2>${currentWeather.name}</h2>
+                                <p>${currentWeather.weather[0].description}</p>
+                                <p>Feels like: ${
+                                  Math.round(
+                                    currentWeather.main.feels_like * 10
+                                  ) / 10
+                                }&deg;C</p>
+                              </div>
+                              
+                            </div>
+                          `;
+    
+    */
 
     currentSection.innerHTML = currentContent;
 
@@ -1080,31 +1120,41 @@
     console.log(currentWeather.main.temp);
 
     console.log(weatherForecast.hourly[0].dt);
+    let hours = `<th class="now">Now</th>`;
 
-    const hours = weatherForecast.hourly
+    hours += weatherForecast.hourly
+      .slice(1)
       .map((hour) => {
         return `<th>${unixToHours(
           weatherForecast.timezone_offset + hour.dt
         )}</th>`;
       })
       .join("");
-    //description
-    const weatherIcons = weatherForecast.hourly
+    let weatherIcons = `<td class="now icon"><div><img class="icon-${currentWeather.weather[0].icon}" src="https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png" alt="Weather icon: ${currentWeather.weather[0].description}"></div></td>`;
+
+    weatherIcons += weatherForecast.hourly
+      .slice(1)
       .map((hour) => {
-        return `<td><img src="http://openweathermap.org/img/wn/${hour.weather[0].icon}.png" alt="Weather icon: ${hour.weather[0].description}"></td>`;
+        return `<td><div><img class="icon-${hour.weather[0].icon}" src="https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png" alt="Weather icon: ${hour.weather[0].description}"></div></td>`;
+      })
+      .join("");
+    let temps = `<td class="now">${Math.round(
+      currentWeather.main.temp
+    )}&deg;</td>`;
+
+    temps += weatherForecast.hourly
+      .slice(1)
+      .map((hour) => {
+        return `<td>${Math.round(hour.temp)}&deg;</td>`;
       })
       .join("");
 
-    const temps = weatherForecast.hourly
-      .map((hour) => {
-        return `<td>${hour.temp}&deg;</td>`;
-      })
-      .join("");
-
-    let hourlyTable = `<table>
-                        <tr>${hours}</tr>
-                        <tr>${weatherIcons}</tr>
-                        <tr>${temps}</tr>
+    let hourlyTable = `<table class="hourly-forecast__table">
+                        <tbody>
+                          <tr>${hours}</tr>
+                          <tr>${weatherIcons}</tr>
+                          <tr>${temps}</tr>
+                        </tbody>
                       </table>`;
 
     hourlySection.innerHTML = hourlyTable;
@@ -1116,15 +1166,21 @@
           weekdays[unixToDay(weatherForecast.timezone_offset + day.dt)];
 
         return `<tr>
-        <td>${weekday}</td>
-        <td><img src="http://openweathermap.org/img/wn/${day.weather[0].icon}.png" alt="Weather icon: ${day.weather[0].description}"></td>
-        <td>${day.temp.min}</td>
-        <td>${day.temp.max}</td>
+        <td class="daily-forecast__table__body__weekday">${weekday}</td>
+        <td class="daily-forecast__table__body__weather-icon"><div><img src="https://openweathermap.org/img/wn/${
+          day.weather[0].icon
+        }@2x.png" alt="Weather icon: ${day.weather[0].description}"></div></td>
+        <td class="daily-forecast__table__body__min-temp">${Math.round(
+          day.temp.min
+        )}&deg;</td>
+        <td class="daily-forecast__table__body__max-temp">${Math.round(
+          day.temp.max
+        )}&deg;</td>
       </tr>`;
       })
       .join("");
 
-    const dailyTable = `<table>${days}</table>`;
+    const dailyTable = `<table class="daily-forecast__table"><tbody class="daily-forecast__table__body">${days}</tbody></table>`;
     dailySection.innerHTML = dailyTable;
   };
 
@@ -1236,4 +1292,7 @@
   document
     .querySelector("#searchInput")
     .addEventListener("keyup", autoComplete);
+  document.querySelector("#search-pos-btn").addEventListener("click", (e) => {
+    document.querySelector("#searchSection").classList.toggle("hide");
+  });
 })();
